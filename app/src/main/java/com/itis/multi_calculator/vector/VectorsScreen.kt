@@ -11,9 +11,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.itis.multi_calculator.R
+import com.itis.multi_calculator.history.HistoryManager
 
 @Composable
-fun VectorsScreen(modifier: Modifier = Modifier) {
+fun VectorsScreen(
+    modifier: Modifier = Modifier,
+    onMenuClick: () -> Unit
+) {
     val context = LocalContext.current
     var vectorAText by remember { mutableStateOf("") }
     var vectorBText by remember { mutableStateOf("") }
@@ -21,13 +25,15 @@ fun VectorsScreen(modifier: Modifier = Modifier) {
     var resultText by remember { mutableStateOf(defaultResult) }
     var isError by remember { mutableStateOf(false) }
 
-    fun performOperation(operation: (Vector2D, Vector2D) -> Any) {
+    fun performOperation(opName: String, operation: (Vector2D, Vector2D) -> Any) {
         try {
             val a = parseVector(vectorAText, context)
             val b = parseVector(vectorBText, context)
             val result = operation(a, b)
-            resultText = context.getString(R.string.vector_result, result.toString())
+            val resStr = result.toString()
+            resultText = context.getString(R.string.vector_result, resStr)
             isError = false
+            HistoryManager.addHistoryItem("$opName: $a, $b", resStr)
         } catch (e: IllegalArgumentException) {
             resultText = "Ошибка: ${e.message}"
             isError = true
@@ -49,7 +55,7 @@ fun VectorsScreen(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = {  },
+                onClick = onMenuClick,
                 shape = RoundedCornerShape(50)
             ) {
                 Text(stringResource(R.string.vector_menu))
@@ -100,23 +106,25 @@ fun VectorsScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            val sumText = stringResource(R.string.vector_sum)
+            val subText = stringResource(R.string.vector_subtraction)
             Button(
-                onClick = { performOperation { a, b -> sum(a, b) } },
+                onClick = { performOperation(sumText) { a, b -> sum(a, b) } },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
             ) {
-                Text(stringResource(R.string.vector_sum))
+                Text(sumText)
             }
             Button(
-                onClick = { performOperation { a, b -> subtraction(a, b) } },
+                onClick = { performOperation(subText) { a, b -> subtraction(a, b) } },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp)
             ) {
-                Text(stringResource(R.string.vector_subtraction))
+                Text(subText)
             }
         }
 
@@ -126,23 +134,25 @@ fun VectorsScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            val prodText = stringResource(R.string.vector_product)
+            val distText = stringResource(R.string.vector_distance)
             Button(
-                onClick = { performOperation { a, b -> product(a, b) } },
+                onClick = { performOperation(prodText) { a, b -> product(a, b) } },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
             ) {
-                Text(stringResource(R.string.vector_product))
+                Text(prodText)
             }
             Button(
-                onClick = { performOperation { a, b -> distance(a, b) } },
+                onClick = { performOperation(distText) { a, b -> distance(a, b) } },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp)
             ) {
-                Text(stringResource(R.string.vector_distance))
+                Text(distText)
             }
         }
 
