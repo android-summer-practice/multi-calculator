@@ -36,7 +36,8 @@ import com.itis.multi_calculator.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
-    state: CalculatorState = rememberCalculatorState()
+    state: CalculatorState = rememberCalculatorState(),
+            onMenuClick: () -> Unit
 ) {
     val targetButtonColor = Color(0xFF4C608A)
 
@@ -53,8 +54,9 @@ fun CalculatorScreen(
                     )
                 },
                 navigationIcon = {
+
                     Button(
-                        onClick = { },
+                        onClick = onMenuClick,
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .padding(start = 16.dp)
