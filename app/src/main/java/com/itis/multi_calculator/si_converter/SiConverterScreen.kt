@@ -8,9 +8,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.itis.multi_calculator.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -18,8 +20,8 @@ fun SiConverterScreen() {
     var inputValue by remember { mutableStateOf("") }
     var outputValue by remember { mutableStateOf("0.0") }
 
-    val lengthUnits = listOf("Метры (м)", "Километры (км)", "Мили (ми)")
-    val massUnits = listOf("Килограммы (кг)", "Фунты (лб)")
+    val lengthUnits = listOf("m", "km", "mi")
+    val massUnits = listOf("kg", "lb")
     val allUnits = lengthUnits + massUnits
 
     var inputUnit by remember { mutableStateOf(allUnits[0]) }
@@ -36,6 +38,16 @@ fun SiConverterScreen() {
         }
     }
 
+    val unitLabels = mapOf(
+        "m" to stringResource(R.string.unit_m),
+        "km" to stringResource(R.string.unit_km),
+        "mi" to stringResource(R.string.unit_mi),
+        "kg" to stringResource(R.string.unit_kg),
+        "lb" to stringResource(R.string.unit_lb)
+    )
+
+    val errorText = stringResource(R.string.si_error_input)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +56,7 @@ fun SiConverterScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Конвертер в систему СИ",
+            text = stringResource(R.string.si_converter_title),
             fontSize = 26.sp,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
@@ -53,7 +65,7 @@ fun SiConverterScreen() {
         OutlinedTextField(
             value = inputValue,
             onValueChange = { inputValue = it },
-            label = { Text("Введите значение") },
+            label = { Text(stringResource(R.string.si_input_label)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
                 if (inputValue.isNotEmpty()) {
@@ -72,10 +84,10 @@ fun SiConverterScreen() {
             onExpandedChange = { inputExpanded = !inputExpanded }
         ) {
             OutlinedTextField(
-                value = inputUnit,
+                value = unitLabels[inputUnit] ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Из какой единицы") },
+                label = { Text(stringResource(R.string.si_from_unit)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = inputExpanded) },
                 modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
             )
@@ -85,7 +97,7 @@ fun SiConverterScreen() {
             ) {
                 allUnits.forEach { unit ->
                     DropdownMenuItem(
-                        text = { Text(unit) },
+                        text = { Text(unitLabels[unit] ?: "") },
                         onClick = {
                             inputUnit = unit
                             inputExpanded = false
@@ -102,10 +114,10 @@ fun SiConverterScreen() {
             onExpandedChange = { outputExpanded = !outputExpanded }
         ) {
             OutlinedTextField(
-                value = outputUnit,
+                value = unitLabels[outputUnit] ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("В какую единицу") },
+                label = { Text(stringResource(R.string.si_to_unit)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = outputExpanded) },
                 modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
             )
@@ -115,7 +127,7 @@ fun SiConverterScreen() {
             ) {
                 availableOutputUnits.forEach { unit ->
                     DropdownMenuItem(
-                        text = { Text(unit) },
+                        text = { Text(unitLabels[unit] ?: "") },
                         onClick = {
                             outputUnit = unit
                             outputExpanded = false
@@ -129,12 +141,13 @@ fun SiConverterScreen() {
 
         Button(
             onClick = {
-                outputValue = SiConverterLogic.convert(inputValue, inputUnit, outputUnit)
+                val res = SiConverterLogic.convert(inputValue, inputUnit, outputUnit)
+                outputValue = if (res == "Ошибка") errorText else res
             },
             modifier = Modifier.fillMaxWidth().height(54.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Конвертировать", fontSize = 18.sp)
+            Text(stringResource(R.string.si_button_convert), fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -145,12 +158,12 @@ fun SiConverterScreen() {
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 Text(
-                    text = "Результат:",
+                    text = stringResource(R.string.si_result_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
                 Text(
-                    text = "$outputValue ${outputUnit.substringAfter(" ")}",
+                    text = if (outputValue == errorText) errorText else "$outputValue ${(unitLabels[outputUnit] ?: "").substringAfter(" ")}",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 8.dp),

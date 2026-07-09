@@ -4,24 +4,20 @@ import java.util.Locale
 
 object SiConverterLogic {
 
-    private val lengthRates = mapOf(
-        "Метры (м)" to 1.0,
-        "Километры (км)" to 1000.0,
-        "Мили (ми)" to 1609.344
-    )
-
-    private val massRates = mapOf(
-        "Килограммы (кг)" to 1.0,
-        "Фунты (лб)" to 0.45359237
-    )
+    private const val RATE_KM = 1000.0
+    private const val RATE_MI = 1609.344
+    private const val RATE_LB = 0.45359237
 
     fun convert(valueStr: String, fromUnit: String, toUnit: String): String {
         val value = valueStr.trim().replace(",", ".").toDoubleOrNull()
-            ?: return "Ошибка ввода"
+            ?: return "Ошибка"
 
         if (fromUnit == toUnit) {
             return formatResult(value)
         }
+
+        val lengthRates = mapOf("m" to 1.0, "km" to RATE_KM, "mi" to RATE_MI)
+        val massRates = mapOf("kg" to 1.0, "lb" to RATE_LB)
 
         return when {
             lengthRates.containsKey(fromUnit) && lengthRates.containsKey(toUnit) -> {
@@ -34,7 +30,7 @@ object SiConverterLogic {
                 val finalValue = valueInKg / (massRates[toUnit] ?: 1.0)
                 formatResult(finalValue)
             }
-            else -> "Несовместимые типы"
+            else -> ""
         }
     }
 
