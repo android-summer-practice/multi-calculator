@@ -16,6 +16,8 @@
     <string name="menu_subtitle_converter">converter</string>
     <string name="menu_btn_exit">Exit</string>
     <string name="menu_btn_history">History</string>
+    <string name="history_empty">История пуста</string>
+    <string name="history_clear">Очистить</string>
     <!-- Vector Screen -->
     <string name="vector_title">Vectors</string>
     <string name="vector_menu">Меню</string>

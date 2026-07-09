@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.itis.multi_calculator.history.HistoryManager
 
 class CalculatorState {
     var numberA by mutableStateOf("")
@@ -23,6 +24,9 @@ class CalculatorState {
 
     fun onCalculate() {
         resultText = calculate(numberA, numberB, selectedOperation)
+        if (resultText.isNotEmpty() && !resultText.startsWith("Error")) {
+            HistoryManager.addHistoryItem("$numberA $selectedOperation $numberB", resultText)
+        }
     }
 }
 
