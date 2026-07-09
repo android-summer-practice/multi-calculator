@@ -1,25 +1,24 @@
 package com.itis.multi_calculator
 
+import com.itis.multi_calculator.vector.VectorsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.itis.multi_calculator.calculator.CalculatorScreen
 import com.itis.multi_calculator.ui.theme.MulticalculatorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             MulticalculatorTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    CalculatorScreen()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    VectorsScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Multi Calculator</string>
     <string name="calculator_title">Calculator</string>
@@ -15,4 +16,23 @@
     <string name="menu_subtitle_converter">converter</string>
     <string name="menu_btn_exit">Exit</string>
     <string name="menu_btn_history">History</string>
+    <!-- Vector Screen -->
+    <string name="vector_title">Vectors</string>
+    <string name="vector_menu">Меню</string>
+    <string name="vector_a_label">Vector A (x,y)</string>
+    <string name="vector_b_label">Vector B (x,y)</string>
+    <string name="vector_sum">Сумма</string>
+    <string name="vector_subtraction">Вычитание</string>
+    <string name="vector_product">Умножение</string>
+    <string name="vector_distance">Расстояние</string>
+    <string name="vector_default_result">Результат отобразится здесь</string>
+    <string name="vector_result">Результат: %s</string>
+    <string name="vector_format_hint">Допустимые форматы: 1,2  или  1;2  или  1 2</string>
+
+    <!-- Vector Errors -->
+    <string name="vector_error_empty">Поле ввода пустое</string>
+    <string name="vector_error_no_separator">Не найден разделитель. Используйте: \',\', \';\' или пробел</string>
+    <string name="vector_error_count">Введите ровно 2 числа (сейчас %d)</string>
+    <string name="vector_error_invalid_chars">Недопустимые символы: %s</string>
+    <string name="vector_error_invalid_numbers">Введите корректные числа (используйте \'.\' для дробей)</string>
 </resources>
