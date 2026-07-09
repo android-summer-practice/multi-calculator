@@ -116,14 +116,17 @@ fun SiConverterScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         // Кнопка для запуска расчета (логика расчета будет на следующем этапе)
+        // Кнопка для запуска расчета
         Button(
             onClick = {
-                outputValue = inputValue.toDoubleOrNull()?.toString() ?: "Ошибка ввода"
+                // Вызываем наш созданный математический движок
+                outputValue = SiConverterLogic.convert(inputValue, inputUnit, outputUnit)
             },
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             Text("Конвертировать", fontSize = 18.sp)
         }
+
 
         Spacer(modifier = Modifier.height(32.dp))
 
