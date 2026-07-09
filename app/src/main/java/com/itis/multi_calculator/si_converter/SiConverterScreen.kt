@@ -2,6 +2,8 @@ package com.itis.multi_calculator.si_converter
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,47 +15,58 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SiConverterScreen() {
-    // Состояния для хранения введенных данных и результатов
     var inputValue by remember { mutableStateOf("") }
     var outputValue by remember { mutableStateOf("0.0") }
 
-    // Списки доступных единиц измерения
-    val units = listOf("Метры (м)", "Километры (км)", "Мили (ми)", "Килограммы (кг)", "Фунты (лб)")
+    val lengthUnits = listOf("Метры (м)", "Километры (км)", "Мили (ми)")
+    val massUnits = listOf("Килограммы (кг)", "Фунты (лб)")
+    val allUnits = lengthUnits + massUnits
 
-    // Исправлено: теперь храним ОДНУ строку, а не весь список
-    var inputUnit by remember { mutableStateOf(units[0]) }
-    var outputUnit by remember { mutableStateOf(units[0]) }
+    var inputUnit by remember { mutableStateOf(allUnits[0]) }
+    var outputUnit by remember { mutableStateOf(allUnits[0]) }
 
-    // Состояния для раскрытия выпадающих списков
     var inputExpanded by remember { mutableStateOf(false) }
     var outputExpanded by remember { mutableStateOf(false) }
+
+    val availableOutputUnits = if (inputUnit in lengthUnits) lengthUnits else massUnits
+
+    LaunchedEffect(inputUnit) {
+        if (outputUnit !in availableOutputUnits) {
+            outputUnit = availableOutputUnits[0]
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Конвертер в систему СИ",
-            fontSize = 24.sp,
+            fontSize = 26.sp,
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        // Поле ввода числа
         OutlinedTextField(
             value = inputValue,
             onValueChange = { inputValue = it },
             label = { Text("Введите значение") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                if (inputValue.isNotEmpty()) {
+                    IconButton(onClick = { inputValue = "" }) {
+                        Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                    }
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Выбор исходной единицы (Из чего переводим)
         ExposedDropdownMenuBox(
             expanded = inputExpanded,
             onExpandedChange = { inputExpanded = !inputExpanded }
@@ -70,7 +83,7 @@ fun SiConverterScreen() {
                 expanded = inputExpanded,
                 onDismissRequest = { inputExpanded = false }
             ) {
-                units.forEach { unit ->
+                allUnits.forEach { unit ->
                     DropdownMenuItem(
                         text = { Text(unit) },
                         onClick = {
@@ -84,7 +97,6 @@ fun SiConverterScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Выбор целевой единицы (В какую переводим)
         ExposedDropdownMenuBox(
             expanded = outputExpanded,
             onExpandedChange = { outputExpanded = !outputExpanded }
@@ -101,7 +113,7 @@ fun SiConverterScreen() {
                 expanded = outputExpanded,
                 onDismissRequest = { outputExpanded = false }
             ) {
-                units.forEach { unit ->
+                availableOutputUnits.forEach { unit ->
                     DropdownMenuItem(
                         text = { Text(unit) },
                         onClick = {
@@ -113,35 +125,36 @@ fun SiConverterScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        // Кнопка для запуска расчета (логика расчета будет на следующем этапе)
-        // Кнопка для запуска расчета
         Button(
             onClick = {
-                // Вызываем наш созданный математический движок
                 outputValue = SiConverterLogic.convert(inputValue, inputUnit, outputUnit)
             },
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Text("Конвертировать", fontSize = 18.sp)
         }
 
-
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Блок вывода результата
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "Результат:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(modifier = Modifier.padding(20.dp)) {
                 Text(
-                    text = "$outputValue $outputUnit",
-                    fontSize = 22.sp,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(top = 8.dp)
+                    text = "Результат:",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                Text(
+                    text = "$outputValue ${outputUnit.substringAfter(" ")}",
+                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(top = 8.dp),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
