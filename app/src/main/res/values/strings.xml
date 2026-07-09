@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">multi-calculator</string>
+    <string name="app_name">Multi Calculator</string>
+    <string name="calculator_title">Calculator</string>
+    <string name="menu_button">Меню</string>
+    <string name="placeholder_number_a">Number A</string>
+    <string name="placeholder_number_b">Number B</string>
+    <string name="operation_sum">Сумма (+)</string>
+    <string name="operation_sub">Вычитание (-)</string>
+    <string name="operation_mul">Умножение (*)</string>
+    <string name="operation_div">Деление (/)</string>
+    <string name="result_prefix">Результат: %1$s</string>
 </resources>
