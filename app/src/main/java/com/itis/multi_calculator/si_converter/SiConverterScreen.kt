@@ -46,7 +46,8 @@ fun SiConverterScreen() {
         "lb" to stringResource(R.string.unit_lb)
     )
 
-    val errorText = stringResource(R.string.si_error_input)
+    val errorInputText = stringResource(R.string.si_error_input)
+    val errorTypeText = stringResource(R.string.si_error_type)
 
     Column(
         modifier = Modifier
@@ -142,7 +143,11 @@ fun SiConverterScreen() {
         Button(
             onClick = {
                 val res = SiConverterLogic.convert(inputValue, inputUnit, outputUnit)
-                outputValue = if (res == "Ошибка") errorText else res
+                outputValue = when (res) {
+                    SiConverterLogic.ERROR_INPUT -> errorInputText
+                    SiConverterLogic.ERROR_TYPE -> errorTypeText
+                    else -> res
+                }
             },
             modifier = Modifier.fillMaxWidth().height(54.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -162,8 +167,12 @@ fun SiConverterScreen() {
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
+
+                val displayUnit = unitLabels[outputUnit] ?: ""
+                val isError = outputValue == errorInputText || outputValue == errorTypeText
+
                 Text(
-                    text = if (outputValue == errorText) errorText else "$outputValue ${(unitLabels[outputUnit] ?: "").substringAfter(" ")}",
+                    text = if (isError) outputValue else "$outputValue $displayUnit",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 8.dp),

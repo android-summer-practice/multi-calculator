@@ -30,6 +30,7 @@
     <string name="si_button_convert">Конвертировать</string>
     <string name="si_result_label">Результат:</string>
     <string name="si_error_input">Ошибка ввода</string>
+    <string name="si_error_type">Несовместимые типы</string>
 
     <string name="unit_m">Метры (м)</string>
     <string name="unit_km">Километры (км)</string>
