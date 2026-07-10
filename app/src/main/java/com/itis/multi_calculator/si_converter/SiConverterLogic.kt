@@ -9,7 +9,6 @@ object SiConverterLogic {
     private const val RATE_MI = 1609.344
     private const val RATE_LB = 0.45359237
 
-    // Исправлено: теперь константы лежат в companion object и открыты для экрана
     const val ERROR_INPUT = "ERROR_INPUT"
     const val ERROR_TYPE = "ERROR_TYPE"
 
