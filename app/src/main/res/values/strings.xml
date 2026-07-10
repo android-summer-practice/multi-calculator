@@ -37,4 +37,21 @@
     <string name="vector_error_count">Введите ровно 2 числа (сейчас %d)</string>
     <string name="vector_error_invalid_chars">Недопустимые символы: %s</string>
     <string name="vector_error_invalid_numbers">Введите корректные числа (используйте \'.\' для дробей)</string>
+
+    <!-- Converter -->
+    <string name="si_converter_title">Конвертер в систему СИ</string>
+    <string name="si_input_label">Введите значение</string>
+    <string name="si_from_unit">Из какой единицы</string>
+    <string name="si_to_unit">В какую единицу</string>
+    <string name="si_button_convert">Конвертировать</string>
+    <string name="si_result_label">Результат:</string>
+    <string name="si_error_input">Ошибка ввода</string>
+    <string name="si_error_type">Несовместимые типы</string>
+
+    <string name="unit_m">Метры (м)</string>
+    <string name="unit_km">Километры (км)</string>
+    <string name="unit_mi">Мили (ми)</string>
+    <string name="unit_kg">Килограммы (кг)</string>
+    <string name="unit_lb">Фунты (лб)</string>
+
 </resources>
